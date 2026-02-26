@@ -1,23 +1,31 @@
-# Osiris: AI-Powered Coding Practice
+# Placeholder: AI-Powered Defect Detection App
 
 ## Mission Statement
-> Empowering developers to master their craft through personalized practice that turns weaknesses into strengths.
+> Transforming additive manufacturing through autonomous, closed-loop monitoring that turns machine failures into instant alerts and actionable fleet data.
 
 ## Details
-Osiris is an AI-powered coding practice platform designed to help developers and technical interview candidates improve their skills more effectively by focusing on their weakest areas. Rather than having users randomly select practice problems or rely on full solutions, Osiris begins with a coding assessment to identify skill gaps. Based on the assessment results, Osiris will generate a personalized roadmap of coding problems tailored to each user’s needs. Osiris tracks progress over time, including completed problems, time spent, and performance patterns. Osiris uses this data to continuously refine the problems assigned to our users, using AI as a learning guide, not a problem solver. To ensure AI is used as a learning guide, Osiris assists users in understanding how to approach problems and what to practice next, without directly providing answers. The primary goal is to make interview preparation and skill development more efficient by ensuring users practice the right problems at the right time.
+**Placeholder** is an AI-powered process monitoring platform designed to help manufacturers, teams, and hobbyists eliminate 3D printing failures in real-time. Rather than relying on manual supervision or post-print inspection, Placeholder uses a multi-camera computer vision system to continuously assess the health of a print. 
+
+The system tracks the physical layer against the intended G-code path, identifying defects in the machine’s execution (such as warping, spaghetti, or under-extrusion) as they happen. Through the Placeholder web platform, authenticated users can monitor their machines via a real-time livestream feed, complete with a dynamic "Print Health" confidence percentage bar. When the AI's confidence drops below a safe threshold, the system triggers an emergency stop and immediately dispatches an email notification. 
+
+Built with scalability in mind, Osiris-AM features robust Organization management. Users can join teams to view each other's live printing feeds, analyze fleet-wide statistics, and subscribe to shared error notifications, making it the perfect tool for makerspaces, university labs, and industrial print farms.
 
 ## Unique Features
-- **AI-Powered Coding Assessment:** Initial evaluation to baseline your current skills.
-- **Tailored Problem Sets:** Focused practice specifically targeting your coding weaknesses.
-- **AI-Powered Recommendations:** Smart suggestions that evolve as you improve.
-- **Personalized Roadmaps:** Custom learning paths built from your assessment data.
-- **Skill Gap Identification:** Pinpoint exactly where you need the most work.
+* **Real-Time Print Dashboard:** Monitor your prints with a live camera feed and a dynamic AI confidence percentage bar indicating current print health.
+* **Instant Email Notifications:** Secure user authentication linked to an automated alert system that emails you the moment a defect is detected.
+* **Organization & Team Hub:** Create or join organizations to share live camera feeds, track fleet-wide print statistics, and manage collaborative printing workflows.
+* **Multi-Camera Vision Mesh:** Scalable support for multiple angles to eliminate nozzle occlusion and monitor large-scale industrial printers.
+* **Defect Detection:** Real-time identification of "Spaghetti," "Warping," and "Delamination" using high-speed Convolutional Neural Networks (CNNs).
+* **Autonomous Intervention:** Automatic "Emergency Stop" triggers via OctoPrint when catastrophic failures occur.
 
 ## Tech Stack
-- **Backend:** FastAPI (Python)
-- **Frontend:** Next.js / Node.js
-- **Database:** Supabase (PostgreSQL)
-- **Local AI Platform:** Ollama
+* **Backend:** FastAPI (Python)
+* **Frontend:** Next.js / Node.js
+* **Database & Auth:** Supabase (PostgreSQL, Authentication, Row Level Security)
+* **Local AI Platform:** Ollama (Llama 3 / Mistral)
+* **Control Interface:** OctoPrint API
+
+---
 
 ## Getting Started
 
@@ -25,50 +33,47 @@ Osiris is an AI-powered coding practice platform designed to help developers and
 
 ### Backend Setup
 
-1. **Set up environment variables**
-   
-   Look at .env.example in backend directory and create new file named .env and add correct variables from it (get variables from supabase or group member)
-   
+1.  **Set up environment variables**
+    Look at `.env.example` in the backend directory and create a new file named `.env`. Add the correct variables (OctoPrint API keys, Supabase credentials, Email SMTP settings, etc.).
 
-2. **Navigate to the backend directory:**
-   ```bash
-   cd backend
-   ```
+2.  **Navigate to the backend directory:**
+    ```bash
+    cd backend
+    ```
 
-3. **Create & Activate a Virtual Environment:**
-   ```bash
-   python -m venv venv
-   source venv/bin/activate
-   ```
+3.  **Create & Activate a Virtual Environment:**
+    ```bash
+    python -m venv venv
+    source venv/bin/activate
+    ```
 
-4. **Install Dependencies:**
-   ```bash
-   pip install -r requirements.txt
-   ```
+4.  **Install Dependencies:**
+    ```bash
+    pip install -r requirements.txt
+    ```
 
-5. **Return to Root Directory**
-   ```bash
-   cd ..
-   ```
+5.  **Return to Root Directory:**
+    ```bash
+    cd ..
+    ```
 
-6. **Run the Backend Server:**
-   ```bash
-   uvicorn backend.main:app --reload
-   ```
+6.  **Run the Backend Server:**
+    ```bash
+    uvicorn backend.main:app --reload
+    ```
 
 ### Frontend Setup
 
-1. **Environment variable set up:**
+1.  **Environment variable set up:**
+    Create a new file named `.env.local` in the `frontend/osiris` directory and add correct variables from `.env.example`. Change the backend URL to your local backend URL if needed.
 
-   Create new file named .env.local in frontend/osiris directory and add correct variables from .env.example. Just copy everything from that file. Change backend     url to your backend url if needed.
+2.  **Navigate to the Frontend Directory:**
+    ```bash
+    cd ../frontend/osiris
+    ```
 
-2. **Navigate to the Frontend Directory:**
-   ```bash
-   cd ../frontend/osiris
-   ```
-
-3. **Install Packages & Launch Development Server:**
-   ```bash
-   npm install
-   npm run dev
-   ```
+3.  **Install Packages & Launch Development Server:**
+    ```bash
+    npm install
+    npm run dev
+    ```
