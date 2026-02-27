@@ -1,4 +1,3 @@
-```markdown
 # Architecture
 
 This document records the major architectural decisions for the project.  
@@ -240,5 +239,3 @@ Use **OpenCV** for frame capture and the **OctoPrint REST API** for machine cont
 - Fine-tuning the YOLOv8 model on highly diverse, real-world makerspace data (varying lighting, colors, and angles).  
 - Implementing a multi-frame confidence threshold (e.g., must see the defect in 3 consecutive frames).  
 - Supporting a multi-camera vision mesh to view the print from different angles simultaneously.
-
-```
