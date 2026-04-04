@@ -17,6 +17,7 @@ interface SidebarNavProps {
   userDisplayName?: string | null;
   organizationName?: string | null;
   userInitials?: string;
+  activeAlertCount?: number;
 }
 
 export function SidebarNav({
@@ -24,16 +25,15 @@ export function SidebarNav({
   userDisplayName = "User",
   organizationName = "Organization",
   userInitials = "U",
+  activeAlertCount = 0,
 }: SidebarNavProps) {
   const pathname = usePathname();
   const navItems = [
     { href: `${basePath}/dashboard`, label: "Dashboard", icon: LayoutDashboard },
-    { href: `${basePath}/alerts`, label: "Alerts", icon: Bell, badge: 2 },
+    { href: `${basePath}/alerts`, label: "Alerts", icon: Bell },
     { href: `${basePath}/history`, label: "History", icon: History },
     { href: `${basePath}/fleet`, label: "Fleet", icon: Server },
-    ...(basePath === "/protected"
-      ? [{ href: `${basePath}/analytics`, label: "Analytics", icon: BarChart3 }]
-      : []),
+    { href: `${basePath}/analytics`, label: "Analytics", icon: BarChart3 },
     { href: `${basePath}/settings`, label: "Settings", icon: Settings },
   ];
 
@@ -52,7 +52,7 @@ export function SidebarNav({
       </div>
 
       <nav className="flex flex-col gap-0.5 p-3 flex-1">
-        {navItems.map(({ href, label, icon: Icon, badge }) => {
+        {navItems.map(({ href, label, icon: Icon }) => {
           const isActive = pathname === href || pathname.startsWith(`${href}/`);
           return (
             <Link
@@ -67,9 +67,10 @@ export function SidebarNav({
             >
               <Icon size={16} strokeWidth={isActive ? 2 : 1.5} />
               <span>{label}</span>
-              {badge ? (
-                <span className="ml-auto bg-pg-warning text-white text-[10px] font-bold rounded-full w-4 h-4 flex items-center justify-center">
-                  {badge}
+              {/* Live alert badge — only shown on Alerts link, only when count > 0 */}
+              {label === "Alerts" && activeAlertCount > 0 ? (
+                <span className="ml-auto bg-pg-danger text-white text-[10px] font-bold rounded-full w-4 h-4 flex items-center justify-center">
+                  {activeAlertCount > 9 ? "9+" : activeAlertCount}
                 </span>
               ) : null}
             </Link>

@@ -79,7 +79,7 @@ export function PrinterStatusCard({
               <CameraOff size={13} className="text-pg-offline opacity-60" />
             )}
           </div>
-          <span className="tabular-nums">{formatRelativeTime(printer.lastFrameAt)}</span>
+          <span className="tabular-nums">Last ping {formatRelativeTime(printer.lastFrameAt)}</span>
         </div>
       </div>
     </Link>

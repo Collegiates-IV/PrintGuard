@@ -1,7 +1,7 @@
 import { History, Clock3 } from "lucide-react";
 import { redirect } from "next/navigation";
 import { EmptyState } from "@/components/empty-state";
-import { SectionNav } from "@/components/section-nav";
+import { Filter, SlidersHorizontal, CalendarDays } from "lucide-react";
 import { getProtectedContext } from "@/lib/data/context";
 import { formatRelativeTime } from "@/lib/mock-data";
 import { cn } from "@/lib/utils";
@@ -16,10 +16,7 @@ interface PrintJobRow {
   printerId: string;
 }
 
-const sections = [
-  { id: "recent", label: "Recent Jobs" },
-  { id: "summary", label: "Summary" },
-];
+
 
 const statusLabelByKey: Record<string, string> = {
   running: "Running",
@@ -58,7 +55,22 @@ export default async function HistoryPage() {
         </p>
       </div>
 
-      <SectionNav sections={sections} />
+      <div className="sticky top-0 z-10 bg-background/80 backdrop-blur-sm border-b border-border px-6 py-3 flex items-center gap-3">
+        <button className="flex items-center gap-2 text-xs font-medium text-foreground bg-surface-2 hover:bg-surface-3 border border-border rounded-md px-3 py-1.5 transition-colors">
+          <Filter size={13} />
+          All Jobs
+        </button>
+        <button className="flex items-center gap-2 text-xs font-medium text-muted-foreground hover:text-foreground hover:bg-surface-2 rounded-md px-3 py-1.5 transition-colors hidden sm:flex">
+          <CalendarDays size={13} />
+          Last 7 Days
+        </button>
+        <div className="ml-auto">
+          <button className="flex items-center gap-2 text-xs font-medium text-muted-foreground hover:text-foreground hover:bg-surface-2 border border-transparent hover:border-border rounded-md px-3 py-1.5 transition-colors">
+            <SlidersHorizontal size={13} />
+            Sort: Newest
+          </button>
+        </div>
+      </div>
 
       <div className="px-6 py-8 space-y-12">
         <section id="recent">

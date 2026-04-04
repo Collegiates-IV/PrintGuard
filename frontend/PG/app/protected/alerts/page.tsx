@@ -1,4 +1,4 @@
-import { Bell } from "lucide-react";
+import { Bell, Clock } from "lucide-react";
 import { redirect } from "next/navigation";
 import { EmptyState } from "@/components/empty-state";
 import { IncidentEvidenceCard } from "@/components/incident-evidence-card";
@@ -6,10 +6,7 @@ import { SectionNav } from "@/components/section-nav";
 import { getProtectedContext } from "@/lib/data/context";
 import { loadRealPrinters } from "@/lib/data/real-data";
 
-const sections = [
-  { id: "active", label: "Active" },
-  { id: "resolved", label: "Resolved" },
-];
+import { Filter, SlidersHorizontal, CheckCircle2 } from "lucide-react";
 
 export default async function AlertsPage() {
   const context = await getProtectedContext();
@@ -24,6 +21,9 @@ export default async function AlertsPage() {
   const activeAlerts = recentAlerts.filter((alert) => alert.type === "warning" || alert.type === "confirmed");
   const resolvedAlerts = recentAlerts.filter((alert) => alert.type === "resolved");
 
+  const fetchedAt = new Date();
+  const fetchedLabel = fetchedAt.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+
   return (
     <div className="animate-fade-in">
       <div className="px-6 pt-6 pb-4 border-b border-border">
@@ -32,8 +32,22 @@ export default async function AlertsPage() {
           Live incident queue for {context.activeOrganizationName ?? "your organization"}
         </p>
       </div>
-
-      <SectionNav sections={sections} />
+      <div className="sticky top-0 z-10 bg-background/80 backdrop-blur-sm border-b border-border px-6 py-3 flex items-center gap-3">
+        <button className="flex items-center gap-2 text-xs font-medium text-foreground bg-surface-2 hover:bg-surface-3 border border-border rounded-md px-3 py-1.5 transition-colors">
+          <Filter size={13} />
+          All Alerts
+        </button>
+        <button className="flex items-center gap-2 text-xs font-medium text-muted-foreground hover:text-foreground hover:bg-surface-2 rounded-md px-3 py-1.5 transition-colors hidden sm:flex">
+          <CheckCircle2 size={13} />
+          Needs Review
+        </button>
+        <div className="ml-auto">
+          <button className="flex items-center gap-2 text-xs font-medium text-muted-foreground hover:text-foreground hover:bg-surface-2 border border-transparent hover:border-border rounded-md px-3 py-1.5 transition-colors">
+            <SlidersHorizontal size={13} />
+            Sort: Newest
+          </button>
+        </div>
+      </div>
 
       <div className="px-6 py-8 space-y-12">
         <section id="active">
@@ -45,9 +59,15 @@ export default async function AlertsPage() {
           </div>
           {activeAlerts.length === 0 ? (
             <EmptyState
-              icon={<Bell size={32} />}
+              icon={<Bell size={28} />}
               title="No active incidents"
               description="Warnings and confirmed failures will appear here as detections are recorded."
+              action={
+                <span className="inline-flex items-center gap-1.5 text-[11px] text-muted-foreground/60">
+                  <Clock size={11} />
+                  Last synced {fetchedLabel}
+                </span>
+              }
             />
           ) : (
             <div className="grid sm:grid-cols-2 xl:grid-cols-3 gap-4">

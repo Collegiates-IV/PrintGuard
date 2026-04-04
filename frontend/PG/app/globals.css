@@ -78,6 +78,19 @@
   ::-webkit-scrollbar-thumb:hover {
     background: hsl(var(--muted-foreground) / 0.4);
   }
+
+  /* Native dialog reset */
+  dialog {
+    background: transparent;
+    border: none;
+    padding: 0;
+    color: inherit;
+  }
+
+  dialog::backdrop {
+    background: rgb(0 0 0 / 0.5);
+    backdrop-filter: blur(4px);
+  }
 }
 
 @layer utilities {

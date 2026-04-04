@@ -6,9 +6,6 @@ import {
   PauseCircle,
   XOctagon,
   ChevronRight,
-  Layers,
-  Clock,
-  TrendingDown,
   Activity,
 } from "lucide-react";
 import { MetricCard } from "@/components/metric-card";
@@ -98,7 +95,9 @@ export default async function DashboardPage() {
       <div className="px-6 py-8 space-y-12">
         <section id="overview">
           <SectionHeader title="Operational Overview" />
-          <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-3">
+
+          {/* Primary operational counters — high scan priority */}
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
             <MetricCard
               label="Active"
               value={activeCount}
@@ -127,29 +126,37 @@ export default async function DashboardPage() {
               status={failureCount > 0 ? "danger" : "neutral"}
               subtext="confirmed incidents"
             />
-            <MetricCard
-              label="Filament Saved"
-              value={(metrics.totalFilamentSavedG / 1000).toFixed(2)}
-              unit="kg"
-              icon={<Layers size={14} />}
-              status="healthy"
-              subtext="waste prevented"
-            />
-            <MetricCard
-              label="Time Saved"
-              value={Math.round(metrics.totalTimeSavedMin / 60)}
-              unit="hrs"
-              icon={<Clock size={14} />}
-              status="healthy"
-              subtext="recovered runtime"
-            />
-            <MetricCard
-              label="Failure Rate"
-              value={`${(metrics.failureRate * 100).toFixed(1)}%`}
-              icon={<TrendingDown size={14} />}
-              status={metrics.failureRate > 0.1 ? "warning" : "healthy"}
-              subtext="30 day estimate"
-            />
+          </div>
+
+          {/* Secondary efficiency snapshot — lower visual priority, links to Analytics */}
+          <div className="mt-3 flex flex-wrap items-center gap-x-6 gap-y-1 px-1 py-2.5 border-t border-border">
+            <span className="text-[10px] text-muted-foreground/50 uppercase tracking-wide mr-1 shrink-0">
+              Efficiency
+            </span>
+            <span className="text-xs text-muted-foreground tabular-nums">
+              <span className="font-medium text-foreground/70">
+                {(metrics.totalFilamentSavedG / 1000).toFixed(2)} kg
+              </span>{" "}
+              filament saved
+            </span>
+            <span className="text-xs text-muted-foreground tabular-nums">
+              <span className="font-medium text-foreground/70">
+                {Math.round(metrics.totalTimeSavedMin / 60)} hrs
+              </span>{" "}
+              recovered runtime
+            </span>
+            <span className="text-xs text-muted-foreground tabular-nums">
+              <span className={metrics.failureRate > 0.1 ? "font-medium text-pg-warning" : "font-medium text-foreground/70"}>
+                {(metrics.failureRate * 100).toFixed(1)}%
+              </span>{" "}
+              failure rate
+            </span>
+            <Link
+              href="/protected/analytics"
+              className="ml-auto text-[11px] text-muted-foreground hover:text-foreground transition-colors flex items-center gap-1"
+            >
+              Full breakdown <ChevronRight size={11} />
+            </Link>
           </div>
         </section>
 
@@ -201,7 +208,7 @@ export default async function DashboardPage() {
                     <div className="flex items-center gap-3 shrink-0">
                       <StatusBadge status={printer.status} size="sm" />
                       <span className="text-xs text-muted-foreground tabular-nums">
-                        {formatRelativeTime(printer.lastFrameAt)}
+                        Last ping {formatRelativeTime(printer.lastFrameAt)}
                       </span>
                     </div>
                   </div>

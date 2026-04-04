@@ -6,6 +6,7 @@ import {
 } from "@/lib/mock-data";
 import { MetricCard } from "@/components/metric-card";
 import { PrinterStatusCard } from "@/components/printer-status-card";
+import { SectionNav } from "@/components/section-nav";
 import {
   Printer,
   AlertTriangle,
@@ -19,6 +20,13 @@ import Link from "next/link";
 import { cn } from "@/lib/utils";
 
 export default function DemoDashboardPage() {
+  const sections = [
+    { id: "overview", label: "Overview" },
+    { id: "attention", label: "Attention Needed" },
+    { id: "fleet", label: "Fleet Status" },
+    { id: "activity", label: "Recent Activity" },
+  ];
+
   const printers = MOCK_PRINTERS;
   const metrics = MOCK_FLEET_METRICS;
   const recentAlerts = [...MOCK_ALERTS].slice(0, 10);
@@ -34,16 +42,18 @@ export default function DemoDashboardPage() {
         <p className="text-sm text-muted-foreground">Demo Organization · {printers.length} printers</p>
       </div>
 
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
+      <SectionNav sections={sections} />
+
+      <section id="overview" className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
         <MetricCard label="Active" value={metrics.activePrinters} icon={<Printer size={14} />} status="neutral" subtext="printers monitoring" />
         <MetricCard label="Warnings" value={metrics.warnings} icon={<AlertTriangle size={14} />} status={metrics.warnings > 0 ? "warning" : "neutral"} subtext="need attention" />
         <MetricCard label="Paused" value={metrics.paused} icon={<PauseCircle size={14} />} status={metrics.paused > 0 ? "warning" : "neutral"} subtext="awaiting override" />
         <MetricCard label="Filament Saved" value={(metrics.totalFilamentSavedG / 1000).toFixed(2)} unit="kg" icon={<Layers size={14} />} status="healthy" subtext="waste prevented" />
         <MetricCard label="Time Saved" value={Math.round(metrics.totalTimeSavedMin / 60)} unit="hrs" icon={<Clock size={14} />} status="healthy" subtext="across all jobs" />
-      </div>
+      </section>
 
       {needsAttention.length > 0 ? (
-        <section className="space-y-3">
+        <section id="attention" className="space-y-3">
           <h2 className="text-sm font-semibold text-foreground flex items-center gap-2">
             <AlertTriangle size={14} className="text-pg-warning" />
             Needs Attention
@@ -69,7 +79,7 @@ export default function DemoDashboardPage() {
       ) : null}
 
       <div className="grid lg:grid-cols-3 gap-6">
-        <section className="lg:col-span-2 space-y-3">
+        <section id="fleet" className="lg:col-span-2 space-y-3">
           <div className="flex items-center justify-between">
             <h2 className="text-sm font-semibold text-foreground">All Printers</h2>
             <Link href="/demo/fleet" className="text-xs text-muted-foreground hover:text-foreground flex items-center gap-1 transition-colors">Manage <ChevronRight size={12} /></Link>
@@ -81,7 +91,7 @@ export default function DemoDashboardPage() {
           </div>
         </section>
 
-        <section className="space-y-3">
+        <section id="activity" className="space-y-3">
           <div className="flex items-center justify-between">
             <h2 className="text-sm font-semibold text-foreground">Recent Detections</h2>
             <Link href="/demo/alerts" className="text-xs text-muted-foreground hover:text-foreground flex items-center gap-1 transition-colors">All <ChevronRight size={12} /></Link>

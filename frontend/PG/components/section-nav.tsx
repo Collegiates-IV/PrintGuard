@@ -16,8 +16,25 @@ interface SectionNavProps {
 export function SectionNav({ sections, className }: SectionNavProps) {
   const [activeId, setActiveId] = useState<string>(sections[0]?.id ?? "");
   const observerRef = useRef<IntersectionObserver | null>(null);
+  const navRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
+    // Walk up the DOM to find the actual scrollable container (the <main> in our layout).
+    // The layout uses `overflow-y-auto` on <main>, so window never scrolls.
+    function getScrollContainer(el: HTMLElement | null): HTMLElement | null {
+      let node = el?.parentElement ?? null;
+      while (node && node !== document.documentElement) {
+        const { overflowY } = window.getComputedStyle(node);
+        if (overflowY === "auto" || overflowY === "scroll") {
+          return node;
+        }
+        node = node.parentElement;
+      }
+      return null;
+    }
+
+    const scrollContainer = getScrollContainer(navRef.current);
+
     if (observerRef.current) {
       observerRef.current.disconnect();
     }
@@ -33,6 +50,9 @@ export function SectionNav({ sections, className }: SectionNavProps) {
     };
 
     observerRef.current = new IntersectionObserver(callback, {
+      // Pass the scroll container as root so intersection is computed
+      // relative to the scrollable <main>, not the full browser viewport.
+      root: scrollContainer ?? null,
       rootMargin: "-10% 0px -55% 0px",
       threshold: [0.15],
     });
@@ -54,14 +74,14 @@ export function SectionNav({ sections, className }: SectionNavProps) {
     if (!element) {
       return;
     }
-    const offset = 100;
-    const top = element.getBoundingClientRect().top + window.scrollY - offset;
-    window.scrollTo({ top, behavior: "smooth" });
+    // scrollIntoView respects the actual scroll container, not window
+    element.scrollIntoView({ behavior: "smooth", block: "start" });
     setActiveId(id);
   }
 
   return (
     <nav
+      ref={navRef}
       className={cn(
         "sticky top-0 z-30 flex items-center gap-1 px-6 h-10",
         "bg-background/95 backdrop-blur-sm border-b border-border",

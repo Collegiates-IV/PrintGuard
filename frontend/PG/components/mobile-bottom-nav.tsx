@@ -22,7 +22,7 @@ export function MobileBottomNav({ basePath = "/protected" }: MobileBottomNavProp
   ];
 
   return (
-    <nav className="md:hidden fixed bottom-0 inset-x-0 z-50 bg-card border-t border-border flex items-center">
+    <nav className="md:hidden fixed bottom-0 inset-x-0 z-[60] bg-card border-t border-border flex items-center">
       {navItems.map(({ href, label, icon: Icon, badge }) => {
         const isActive = pathname === href || pathname.startsWith(`${href}/`);
         return (

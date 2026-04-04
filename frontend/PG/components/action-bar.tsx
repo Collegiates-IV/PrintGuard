@@ -28,7 +28,7 @@ export function ActionBar({
   if (!showIgnoreAndPause && !showResume) return null;
 
   return (
-    <div className={cn("bg-[hsl(0,80%,99%)] rounded-[14px] border border-border p-5 space-y-4 shadow-sm", className)}>
+    <div className={cn("bg-surface-2 rounded-[14px] border border-border p-5 space-y-4 shadow-sm", className)}>
       <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
         <AlertTriangle size={12} />
         <span>Actions Required</span>

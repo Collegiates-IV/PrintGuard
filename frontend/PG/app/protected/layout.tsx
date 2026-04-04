@@ -4,6 +4,7 @@ import { MobileBottomNav } from "@/components/mobile-bottom-nav";
 import { ConnectivityBanner } from "@/components/connectivity-banner";
 import { ProtectedDataRefresh } from "@/components/protected-data-refresh";
 import { getProtectedContext } from "@/lib/data/context";
+import { loadRealPrinters } from "@/lib/data/real-data";
 import { redirect } from "next/navigation";
 import { cookies } from "next/headers";
 
@@ -31,12 +32,26 @@ export default async function ProtectedLayout({
     redirect("/protected/select-org");
   }
 
+  // Fetch live active alert count for the sidebar badge.
+  // Only active (warning + confirmed) incidents count — resolved do not.
+  let activeAlertCount = 0;
+  if (context.activeOrganizationId) {
+    const { recentAlerts } = await loadRealPrinters(
+      context.supabase,
+      context.activeOrganizationId
+    );
+    activeAlertCount = recentAlerts.filter(
+      (a) => a.type === "warning" || a.type === "confirmed"
+    ).length;
+  }
+
   return (
     <div className="flex h-screen overflow-hidden bg-background text-foreground">
       <SidebarNav
         userDisplayName={context.userDisplayName}
         organizationName={context.activeOrganizationName}
         userInitials={context.userInitials}
+        activeAlertCount={activeAlertCount}
       />
       <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
         <ProtectedDataRefresh />
